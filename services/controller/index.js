@@ -23,24 +23,6 @@ app.get('/products', (req, res, next) => {
 /**
  * Consulta o frete de envio no ShippingService
  */
-
-app.get('/product/:id', (req, res, next) => {
-    // Chama método do microsserviço.
-    inventory.SearchProductByID({ id: req.params.id }, (err, product) => {
-        // Se ocorrer algum erro de comunicação
-        // com o microsserviço, retorna para o navegador.
-        if (err) {
-            console.error(err);
-            res.status(500).send({ error: 'something failed :(' });
-        } else {
-            // Caso contrário, retorna resultado do
-            // microsserviço (um arquivo JSON) com os dados
-            // do produto pesquisado
-            res.json(product);
-        }
-    });
-});
-
 app.get('/shipping/:cep', (req, res, next) => {
     shipping.GetShippingRate(
         {
@@ -60,7 +42,22 @@ app.get('/shipping/:cep', (req, res, next) => {
     );
 });
 
-
+app.get('/product/:id', (req, res, next) => {
+    // Chama método do microsserviço.
+    inventory.SearchProductByID({ id: req.params.id }, (err, product) => {
+        // Se ocorrer algum erro de comunicação
+        // com o microsserviço, retorna para o navegador.
+        if (err) {
+            console.error(err);
+            res.status(500).send({ error: 'something failed :(' });
+        } else {
+            // Caso contrário, retorna resultado do
+            // microsserviço (um arquivo JSON) com os dados
+            // do produto pesquisado
+            res.json(product);
+        }
+    });
+});
 
 /**
  * Inicia o router
